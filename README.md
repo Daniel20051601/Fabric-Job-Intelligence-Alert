@@ -274,3 +274,11 @@ Una plataforma que:
 - 📌 **Prioriza** ofertas por relevancia
 - 📋 **Publica** tablas analíticas
 - 📧 **Notifica** automáticamente las mejores oportunidades
+
+---
+
+## 🧑‍💻 Autor
+
+**Ramón Emilio López**
+- **GitHub:** [@Daniel20051601](https://github.com/Daniel20051601)
+- **LinkedIn:** [ramón-emilio-lopez-57a833211](https://www.linkedin.com/in/ram%C3%B3n-emilio-lopez-57a833211/)
