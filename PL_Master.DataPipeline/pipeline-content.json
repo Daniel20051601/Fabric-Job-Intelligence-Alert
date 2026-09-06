@@ -1,0 +1,272 @@
+{
+  "properties": {
+    "activities": [
+      {
+        "type": "TridentNotebook",
+        "typeProperties": {
+          "notebookId": "5757ab4e-7e19-acf7-4e69-895ebd8676f1",
+          "workspaceId": "00000000-0000-0000-0000-000000000000"
+        },
+        "policy": {
+          "timeout": "0.12:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureInput": false,
+          "secureOutput": false
+        },
+        "name": "Ingest from Remotive",
+        "dependsOn": [
+          {
+            "activity": "Wait for spark session 0",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          }
+        ]
+      },
+      {
+        "type": "TridentNotebook",
+        "typeProperties": {
+          "notebookId": "dc99349b-dc37-a6ec-42f0-de690de09a7b",
+          "workspaceId": "00000000-0000-0000-0000-000000000000"
+        },
+        "policy": {
+          "timeout": "0.12:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureInput": false,
+          "secureOutput": false
+        },
+        "name": "Transform Jobs",
+        "dependsOn": [
+          {
+            "activity": "Wait for spark session",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          }
+        ]
+      },
+      {
+        "type": "TridentNotebook",
+        "typeProperties": {
+          "notebookId": "96975702-c2e7-a6ef-4f3a-c822f0dbf6b1",
+          "workspaceId": "00000000-0000-0000-0000-000000000000"
+        },
+        "policy": {
+          "timeout": "0.12:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureInput": false,
+          "secureOutput": false
+        },
+        "name": "Match jobs",
+        "dependsOn": [
+          {
+            "activity": "Wait for spark session 2",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          }
+        ]
+      },
+      {
+        "type": "TridentNotebook",
+        "typeProperties": {
+          "notebookId": "6c63a509-19a6-aad5-4212-016b9097f171",
+          "workspaceId": "00000000-0000-0000-0000-000000000000"
+        },
+        "policy": {
+          "timeout": "0.12:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureInput": false,
+          "secureOutput": false
+        },
+        "name": "Load Gold Jobs",
+        "dependsOn": [
+          {
+            "activity": "Wait for spark session 3",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          }
+        ]
+      },
+      {
+        "type": "TridentNotebook",
+        "typeProperties": {
+          "notebookId": "50bd8468-253e-9bda-4ae0-c954868f5204",
+          "workspaceId": "00000000-0000-0000-0000-000000000000"
+        },
+        "policy": {
+          "timeout": "0.12:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureInput": false,
+          "secureOutput": false
+        },
+        "name": "Job alerts",
+        "dependsOn": [
+          {
+            "activity": "Wait for spark session 4",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          }
+        ]
+      },
+      {
+        "type": "Wait",
+        "typeProperties": {
+          "waitTimeInSeconds": 15
+        },
+        "name": "Wait for spark session",
+        "dependsOn": [
+          {
+            "activity": "Ingest from Remotive",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          }
+        ]
+      },
+      {
+        "type": "Wait",
+        "typeProperties": {
+          "waitTimeInSeconds": 15
+        },
+        "name": "Wait for spark session 2",
+        "dependsOn": [
+          {
+            "activity": "Transform Jobs",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          }
+        ]
+      },
+      {
+        "type": "Wait",
+        "typeProperties": {
+          "waitTimeInSeconds": 15
+        },
+        "name": "Wait for spark session 3",
+        "dependsOn": [
+          {
+            "activity": "Match jobs",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          }
+        ]
+      },
+      {
+        "type": "Wait",
+        "typeProperties": {
+          "waitTimeInSeconds": 15
+        },
+        "name": "Wait for spark session 4",
+        "dependsOn": [
+          {
+            "activity": "Load Gold Jobs",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          }
+        ]
+      },
+      {
+        "type": "TridentNotebook",
+        "typeProperties": {
+          "notebookId": "a6ccee0b-ae23-b4ab-4c54-0c6eadbc1dc0",
+          "workspaceId": "00000000-0000-0000-0000-000000000000"
+        },
+        "policy": {
+          "timeout": "0.12:00:00",
+          "retry": 3,
+          "retryIntervalInSeconds": 30,
+          "secureInput": false,
+          "secureOutput": false
+        },
+        "name": "Ingest From Get On Board",
+        "dependsOn": []
+      },
+      {
+        "type": "Wait",
+        "typeProperties": {
+          "waitTimeInSeconds": 15
+        },
+        "name": "Wait for spark session 0",
+        "dependsOn": [
+          {
+            "activity": "Ingest From Get On Board",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          }
+        ]
+      },
+      {
+        "type": "IfCondition",
+        "typeProperties": {
+          "expression": {
+            "value": "@not(equals(activity('Job alerts').output.result.exitValue, 'NO_JOBS'))",
+            "type": "Expression"
+          },
+          "ifTrueActivities": [
+            {
+              "type": "Office365Email",
+              "typeProperties": {
+                "body": "<p>@{activity('Job alerts').output.result.exitValue}</p>",
+                "to": "danielvilopez@gmail.com",
+                "subject": "Fabric - Alerta de nuevos Empleos"
+              },
+              "externalReferences": {
+                "connection": "766adb8b-3a2f-47bd-b520-d4af5951b935"
+              },
+              "policy": {
+                "timeout": "0.12:00:00",
+                "retry": 0,
+                "retryIntervalInSeconds": 30,
+                "secureInput": false,
+                "secureOutput": false
+              },
+              "name": "Send Email",
+              "dependsOn": []
+            }
+          ],
+          "ifFalseActivities": [
+            {
+              "type": "SetVariable",
+              "typeProperties": {
+                "variableName": "ExecutionMessage",
+                "value": "No new jobs found. Email alert skipped."
+              },
+              "policy": {
+                "secureInput": false,
+                "secureOutput": false
+              },
+              "name": "ExecutionMessage",
+              "dependsOn": []
+            }
+          ]
+        },
+        "name": "Check pending jobs",
+        "dependsOn": [
+          {
+            "activity": "Job alerts",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          }
+        ]
+      }
+    ],
+    "variables": {
+      "ExecutionMessage": {
+        "type": "String"
+      }
+    }
+  }
+}
