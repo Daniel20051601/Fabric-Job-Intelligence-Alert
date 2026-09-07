@@ -148,7 +148,7 @@ display(df_jobs)
 
 # CELL ********************
 
-df_jobs = df_jobs.filter(F.col('is_sent') == False).limit(6)
+df_jobs_sent = df_jobs.filter(F.col('is_sent') == False).limit(6)
 
 # METADATA ********************
 
@@ -159,7 +159,7 @@ df_jobs = df_jobs.filter(F.col('is_sent') == False).limit(6)
 
 # CELL ********************
 
-display(df_jobs)
+display(df_jobs_sent)
 
 # METADATA ********************
 
@@ -175,10 +175,13 @@ display(df_jobs)
 
 # CELL ********************
 
-jobs = df_jobs.collect()
+jobs = df_jobs_sent.collect()
 
 if not jobs:
-    notebookutils.notebook.exit("NO_JOBS")
+    notebookutils.notebook.exit("""
+<h2>Estas al dia con todas las ofertas de tus fuentes registradas</h2>
+<p>No olvides revisar el estado de tus aplicaciones</p>
+""")
 
 html = """
 <h2>🎯 Nuevas ofertas de trabajo</h2>
@@ -214,7 +217,7 @@ for job in jobs:
 target_alert_table = DeltaTable.forName(spark, 'Gold.job_alerts')
 
 target_alert_table.alias('target').merge(
-    df_jobs.alias('source'),
+    df_jobs_sent.alias('source'),
     'target.hash_id = source.hash_id'
 ).whenMatchedUpdate(set = {
     'is_sent' : F.lit(True),
