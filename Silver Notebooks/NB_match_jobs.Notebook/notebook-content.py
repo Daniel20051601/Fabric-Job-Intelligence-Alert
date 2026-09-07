@@ -399,6 +399,25 @@ display(df_high_score_jobs)
 
 # MARKDOWN ********************
 
+# ## 
+
+# MARKDOWN ********************
+
+# ## Eliminamos duplicados
+
+# CELL ********************
+
+df_high_score_jobs = df_high_score_jobs.drop_duplicates(['hash_id'])
+
+# METADATA ********************
+
+# META {
+# META   "language": "python",
+# META   "language_group": "synapse_pyspark"
+# META }
+
+# MARKDOWN ********************
+
 # ### Guardamos los empleos en una tabla lista para ser consumida por la capa Gold
 
 # CELL ********************
