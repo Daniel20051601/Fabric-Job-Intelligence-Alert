@@ -58,7 +58,7 @@ from delta.tables import DeltaTable
 
 # MARKDOWN ********************
 
-# ### Definición DDL de la Tabla Target `Gold.jobs`
+# ### Definición de la Tabla Target `Gold.jobs`
 
 # CELL ********************
 
