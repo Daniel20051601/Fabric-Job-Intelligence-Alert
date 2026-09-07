@@ -15,14 +15,7 @@
           "secureOutput": false
         },
         "name": "Ingest from Remotive",
-        "dependsOn": [
-          {
-            "activity": "Wait for spark session 0",
-            "dependencyConditions": [
-              "Succeeded"
-            ]
-          }
-        ]
+        "dependsOn": []
       },
       {
         "type": "TridentNotebook",
@@ -40,7 +33,13 @@
         "name": "Transform Jobs",
         "dependsOn": [
           {
-            "activity": "Wait for spark session",
+            "activity": "Ingest from Remotive",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          },
+          {
+            "activity": "Ingest From Get On Board",
             "dependencyConditions": [
               "Succeeded"
             ]
@@ -50,8 +49,8 @@
       {
         "type": "TridentNotebook",
         "typeProperties": {
-          "notebookId": "96975702-c2e7-a6ef-4f3a-c822f0dbf6b1",
-          "workspaceId": "00000000-0000-0000-0000-000000000000"
+          "notebookId": "f0dbf6b1-c822-4f3a-a6ef-c2e796975702",
+          "workspaceId": "c6b1c951-0a9a-4abc-b7e8-8728316be7e5"
         },
         "policy": {
           "timeout": "0.12:00:00",
@@ -61,6 +60,8 @@
           "secureOutput": false
         },
         "name": "Match jobs",
+        "state": "Inactive",
+        "onInactiveMarkAs": "Succeeded",
         "dependsOn": [
           {
             "activity": "Wait for spark session 2",
@@ -73,8 +74,8 @@
       {
         "type": "TridentNotebook",
         "typeProperties": {
-          "notebookId": "6c63a509-19a6-aad5-4212-016b9097f171",
-          "workspaceId": "00000000-0000-0000-0000-000000000000"
+          "notebookId": "9097f171-016b-4212-aad5-19a66c63a509",
+          "workspaceId": "c6b1c951-0a9a-4abc-b7e8-8728316be7e5"
         },
         "policy": {
           "timeout": "0.12:00:00",
@@ -84,6 +85,8 @@
           "secureOutput": false
         },
         "name": "Load Gold Jobs",
+        "state": "Inactive",
+        "onInactiveMarkAs": "Succeeded",
         "dependsOn": [
           {
             "activity": "Wait for spark session 3",
@@ -96,8 +99,8 @@
       {
         "type": "TridentNotebook",
         "typeProperties": {
-          "notebookId": "50bd8468-253e-9bda-4ae0-c954868f5204",
-          "workspaceId": "00000000-0000-0000-0000-000000000000"
+          "notebookId": "868f5204-c954-4ae0-9bda-253e50bd8468",
+          "workspaceId": "c6b1c951-0a9a-4abc-b7e8-8728316be7e5"
         },
         "policy": {
           "timeout": "0.12:00:00",
@@ -107,6 +110,8 @@
           "secureOutput": false
         },
         "name": "Job alerts",
+        "state": "Inactive",
+        "onInactiveMarkAs": "Succeeded",
         "dependsOn": [
           {
             "activity": "Wait for spark session 4",
@@ -121,22 +126,9 @@
         "typeProperties": {
           "waitTimeInSeconds": 15
         },
-        "name": "Wait for spark session",
-        "dependsOn": [
-          {
-            "activity": "Ingest from Remotive",
-            "dependencyConditions": [
-              "Succeeded"
-            ]
-          }
-        ]
-      },
-      {
-        "type": "Wait",
-        "typeProperties": {
-          "waitTimeInSeconds": 15
-        },
         "name": "Wait for spark session 2",
+        "state": "Inactive",
+        "onInactiveMarkAs": "Succeeded",
         "dependsOn": [
           {
             "activity": "Transform Jobs",
@@ -152,6 +144,8 @@
           "waitTimeInSeconds": 15
         },
         "name": "Wait for spark session 3",
+        "state": "Inactive",
+        "onInactiveMarkAs": "Succeeded",
         "dependsOn": [
           {
             "activity": "Match jobs",
@@ -167,6 +161,8 @@
           "waitTimeInSeconds": 15
         },
         "name": "Wait for spark session 4",
+        "state": "Inactive",
+        "onInactiveMarkAs": "Succeeded",
         "dependsOn": [
           {
             "activity": "Load Gold Jobs",
@@ -193,21 +189,6 @@
         "dependsOn": []
       },
       {
-        "type": "Wait",
-        "typeProperties": {
-          "waitTimeInSeconds": 15
-        },
-        "name": "Wait for spark session 0",
-        "dependsOn": [
-          {
-            "activity": "Ingest From Get On Board",
-            "dependencyConditions": [
-              "Succeeded"
-            ]
-          }
-        ]
-      },
-      {
         "type": "IfCondition",
         "typeProperties": {
           "expression": {
@@ -223,7 +204,7 @@
                 "subject": "Fabric - Alerta de nuevos Empleos"
               },
               "externalReferences": {
-                "connection": "766adb8b-3a2f-47bd-b520-d4af5951b935"
+                "connection": "f2d52774-9251-4b13-9196-88819a9cbde0"
               },
               "policy": {
                 "timeout": "0.12:00:00",
@@ -232,27 +213,36 @@
                 "secureInput": false,
                 "secureOutput": false
               },
-              "name": "Send Email",
+              "name": "Send jobs",
               "dependsOn": []
             }
           ],
           "ifFalseActivities": [
             {
-              "type": "SetVariable",
+              "type": "Office365Email",
               "typeProperties": {
-                "variableName": "ExecutionMessage",
-                "value": "No new jobs found. Email alert skipped."
+                "body": "<p>@{activity('Job alerts').output.result.exitValue}</p>",
+                "to": "danielvilopez@gmail.com",
+                "subject": "Fabric - Estas al dia con las ofertas"
+              },
+              "externalReferences": {
+                "connection": "f2d52774-9251-4b13-9196-88819a9cbde0"
               },
               "policy": {
+                "timeout": "0.12:00:00",
+                "retry": 0,
+                "retryIntervalInSeconds": 30,
                 "secureInput": false,
                 "secureOutput": false
               },
-              "name": "ExecutionMessage",
+              "name": "Send email no jobs",
               "dependsOn": []
             }
           ]
         },
         "name": "Check pending jobs",
+        "state": "Inactive",
+        "onInactiveMarkAs": "Succeeded",
         "dependsOn": [
           {
             "activity": "Job alerts",
