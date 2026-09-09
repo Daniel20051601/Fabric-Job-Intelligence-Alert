@@ -140,9 +140,11 @@ flowchart TD
 | Delta Tables | Persistencia incremental |
 | Fabric Data Pipeline | Orquestación |
 | Fabric Semantic Model | Exposición de datos curados |
-| Office 365 Connector | Envío de alertas |
+| Power BI| Visualización y análisis interactivo |
 | Python `requests` | Consumo de APIs |
 | SQL | Esquemas y validación |
+| Office 365 Connector | Envío de alertas |
+
 
 ## 💡 Lógica de Negocio
 
