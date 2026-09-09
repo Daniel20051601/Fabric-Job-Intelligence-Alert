@@ -195,8 +195,9 @@ El pipeline ejecuta en este orden (diariamente a las 08:00am):
 6. Job Alerts
 
 **Lógica final:**
-- ✅ Si hay nuevas vacantes → envía correo
-- ⏭️ Si no hay → envía conrreo indicando que no hay nuevas vacantes
+- ✅ Si el notebook de alertas detecta nuevas vacantes, se envía un correo con las ofertas priorizadas.
+- ⏭️ Si no hay empleos nuevos, también se envía un correo indicando explícitamente que no se encontraron vacantes nuevas.
+- 🔀 El pipeline incluye una condición que evalúa la salida del notebook de alertas para decidir qué tipo de correo enviar.
 
 ## 🚀 Preparación para Replicarlo
 
