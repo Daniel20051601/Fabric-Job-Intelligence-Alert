@@ -99,7 +99,6 @@ flowchart TD
     GA --> AJ
     AJ --> EM["Office 365 Email"]
 ```
-
 ### Lectura del Flujo
 
 **1️⃣ Ingesta**
@@ -224,7 +223,6 @@ Notebooks (6):
 
 Semantic Model: Jobs Semantic Model
 ```
-
 ### Configuración Necesaria
 - Rutas del Lakehouse en notebooks
 - Referencias a esquemas/tablas
@@ -245,7 +243,6 @@ Schemas:
   ├── Gold.jobs
   └── Gold.job_alerts
 ```
-
 ## ✅ Validación
 
 Una ejecución correcta muestra:
