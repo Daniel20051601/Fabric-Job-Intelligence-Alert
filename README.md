@@ -26,23 +26,17 @@ Buscar ofertas de empleo en distintas fuentes es caótico:
 
 ```mermaid
 flowchart LR
-    A[Fuentes de empleo] --> B[Bronze / Files]
-    B --> C[Silver / Normalización]
-    C --> D[Silver / Matching]
-    D --> E[Gold / Curated]
-    D --> F[Gold / Alerts]
-    E --> G[Notebook Alertas]
-    F --> G
-    G --> H[📧 Email]
-    E --> I[Análisis]
+    A[Job sources] --> B[Bronze / Files]
+    B --> C[Silver / Cleaning and Matching]
+    C --> E[Gold / Jobs and alerts]
+    E --> H[Email]
+    E --> I[Semantic Model]
 ```
 
 **Arquitectura Medallion:**
 - 🔴 **Bronze**: Datos crudos de cada fuente
 - 🟢 **Silver**: Estructuras unificadas, limpieza y relevancia
 - 🟡 **Gold**: Tablas listas para consumo operativo y analítico
-- ⚙️ **Pipeline**: Orquestación end-to-end y disparo de alertas
-
 ---
 
 ## 📂 Estructura del Repositorio
@@ -69,11 +63,11 @@ Fabric-Job-Intelligence-Alert/
 
 | Componente | Responsabilidad |
 |---|---|
-| **Sources** | Ingesta desde APIs externas → archivos crudos en Bronze |
-| **Silver** | Normalización, limpieza, deduplicación, scoring |
-| **Gold** | Materialización de tablas finales y generación de alertas |
+| **Sources Notebooks** | Ingesta desde APIs externas hacia archivos en Bronze |
+| **Silver Notebooks** | Normalización, limpieza, deduplicación, scoring |
+| **Gold Notebooks** | Materialización de tablas finales y generación de alertas |
 | **Lakehouse** | Almacenamiento medallion y configuración |
-| **Pipeline** | Orquestación end-to-end y lógica de envío |
+| **DataPipeline** | Orquestación end-to-end y lógica de envío |
 
 ---
 
@@ -86,14 +80,19 @@ flowchart TD
 
     BR --> ST["🔧 NB_transform_jobs"]
     BG --> ST
+    ST --> JP["Silver.jobs_postings"]
 
-    ST --> SJ["🗄️ Silver.job_matches"]
+    JP --> MJ["🎯 NB_match_jobs"]
+    MJ --> SJ["🗄️ Silver.job_matches"]
 
-    SJ --> MJ["🎯 NB_match_jobs"]
-    MJ --> GA["🗄️ Gold.job_alerts"]
-
-    MJ --> GJ["📋 NB_gold_jobs"]
+    SJ --> GJ["📋 NB_gold_jobs"]
     GJ --> GJT["🗄️ Gold.jobs"]
+
+    GJT --> NAJ[NB_alert_jobs]
+    NAJ --> GA["🗄️ Gold.job_alerts"]
+
+    GJT --> SM[📊 Semantic Model]
+    GA  --> SM
 
     GJT --> AJ["📧 NB_alert_jobs"]
     GA --> AJ
@@ -103,7 +102,7 @@ flowchart TD
 ### Lectura del Flujo
 
 **1️⃣ Ingesta**
-- Consumo desde Remotive y Get on Board
+- Consumo desde las fuentes Remotive y Get on Board en principio
 - Persistencia como JSON para trazabilidad
 
 **2️⃣ Transformación**
@@ -127,6 +126,11 @@ flowchart TD
 - Construcción de correo HTML
 - Envío solo si hay nuevas vacantes
 
+**6️⃣ Semantic Model**
+- Capa semántica construida directamente sobre las tablas Gold
+- Definición de relaciones
+- Tablas listas para análisis y visualización en Power BI
+
 ---
 
 ## 🛠️ Tecnologías
@@ -137,6 +141,7 @@ flowchart TD
 | Fabric Notebooks / PySpark | Ingesta y transformación |
 | Delta Tables | Persistencia incremental |
 | Fabric Data Pipeline | Orquestación |
+| Fabric Semantic Model | Exposición de datos curados |
 | Office 365 Connector | Envío de alertas |
 | Python `requests` | Consumo de APIs |
 | SQL | Esquemas y validación |
@@ -176,6 +181,7 @@ Consumen APIs externas, normalizan mínimamente y guardan JSON en:
 **Notebooks:** `NB_transform_jobs` | `NB_match_jobs`
 
 Unifican esquemas, limpian contenido, calculan relevancia y escriben:
+- `Silver.jobs_postings`
 - `Silver.job_matches`
 
 ### 🟡 Gold (Publicación)
@@ -189,7 +195,7 @@ Materializan tablas listas para consumo:
 
 ## ⚙️ Orquestación (PL_Master)
 
-El pipeline ejecuta en este orden (diariamente a las 08:00):
+El pipeline ejecuta en este orden (diariamente a las 08:00am):
 
 1. Ingest From Get On Board
 2. Ingest from Remotive
@@ -200,7 +206,7 @@ El pipeline ejecuta en este orden (diariamente a las 08:00):
 
 **Lógica final:**
 - ✅ Si hay nuevas vacantes → envía correo
-- ⏭️ Si no hay → omite envío
+- ⏭️ Si no hay → envía conrreo indicando que no hay nuevas vacantes
 
 ---
 
@@ -208,7 +214,6 @@ El pipeline ejecuta en este orden (diariamente a las 08:00):
 
 ### Requisitos Previos
 - ✓ Workspace de Microsoft Fabric con permisos para Lakehouse, Notebooks, Pipeline
-- ✓ Acceso a Internet (APIs externas)
 - ✓ Cuenta Office 365 para envío de correos
 
 ### Recursos a Crear
@@ -223,6 +228,8 @@ Notebooks (6):
   ├── NB_match_jobs
   ├── NB_gold_jobs
   └── NB_alert_jobs
+
+Semantic Model: Jobs Semantic Model
 ```
 
 ### Configuración Necesaria
@@ -240,6 +247,7 @@ Files/
       └── GetOnBoard/
 
 Schemas:
+  ├── Silver.jobs_postings
   ├── Silver.job_matches
   ├── Gold.jobs
   └── Gold.job_alerts
@@ -252,10 +260,10 @@ Schemas:
 Una ejecución correcta muestra:
 
 - 📁 Nuevos archivos JSON en Bronze
-- 📊 Filas en `Silver.job_matches`
+- 📊 Filas en `Silver.jobs_postings` y `Silver.job_matches`
 - 📈 Registros en `Gold.jobs`
 - 🔔 Control en `Gold.job_alerts`
-- 📧 Correo HTML con vacantes priorizadas (si hay nuevas)
+- 📧 Correo HTML con vacantes priorizadas o indicando que no hay nuevas vacantes
 
 ---
 
@@ -276,6 +284,25 @@ Una plataforma que:
 - 📧 **Notifica** automáticamente las mejores oportunidades
 
 ---
+
+## 🔍 Vistas del Proyecto
+### Visualización en Power BI
+<img width="744" height="540" alt="image" src="https://github.com/user-attachments/assets/40b975bf-b618-4ad4-a584-f3cf3df98a89" />
+
+### Workspace: **WS_JobPlatform** Lineage view
+<img width="651" height="676" alt="image" src="https://github.com/user-attachments/assets/5844c9d7-9070-4e19-8477-65776afbef07" />
+
+### Lakehouse: **LH_Medallion**
+<img width="1002" height="491" alt="image" src="https://github.com/user-attachments/assets/4c72e025-8d2b-4a4c-a46a-04673aefd62c" />
+
+### Pipeline: **PL_Master**
+<img width="1264" height="272" alt="image" src="https://github.com/user-attachments/assets/90eae0ae-8ace-4b85-a1f6-d5c4037c4947" />
+
+### Semantic Model: **Jobs Semantic Model**
+<img width="578" height="359" alt="image" src="https://github.com/user-attachments/assets/5366f6c5-1b99-4560-835b-fa544ade9da6" />
+
+
+
 
 ## 🧑‍💻 Autor
 
