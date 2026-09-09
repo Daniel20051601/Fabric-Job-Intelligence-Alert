@@ -7,7 +7,6 @@ Plataforma de inteligencia de empleo construida en **Microsoft Fabric** para ing
 [![Delta Lake](https://img.shields.io/badge/Storage-Delta%20Tables-0099B0?style=flat-square)](https://learn.microsoft.com/fabric/data-engineering/lakehouse-overview)
 [![Orchestration](https://img.shields.io/badge/Orchestration-Fabric%20Pipeline-F5A623?style=flat-square)](https://learn.microsoft.com/fabric/data-factory/data-pipelines)
 
----
 
 ## 🎯 El Problema
 
@@ -20,7 +19,6 @@ Buscar ofertas de empleo en distintas fuentes es caótico:
 
 **La solución:** Una capa de inteligencia que captura, estandariza, prioriza y notifica automáticamente.
 
----
 
 ## 🏗️ Visión de la Solución
 
@@ -37,7 +35,6 @@ flowchart LR
 - 🔴 **Bronze**: Datos crudos de cada fuente
 - 🟢 **Silver**: Estructuras unificadas, limpieza y relevancia
 - 🟡 **Gold**: Tablas listas para consumo operativo y analítico
----
 
 ## 📂 Estructura del Repositorio
 
@@ -68,8 +65,6 @@ Fabric-Job-Intelligence-Alert/
 | **Gold Notebooks** | Materialización de tablas finales y generación de alertas |
 | **Lakehouse** | Almacenamiento medallion y configuración |
 | **DataPipeline** | Orquestación end-to-end y lógica de envío |
-
----
 
 ## 🔄 Flujo de Datos
 
@@ -131,8 +126,6 @@ flowchart TD
 - Definición de relaciones
 - Tablas listas para análisis y visualización en Power BI
 
----
-
 ## 🛠️ Tecnologías
 
 | Tecnología | Rol |
@@ -145,8 +138,6 @@ flowchart TD
 | Office 365 Connector | Envío de alertas |
 | Python `requests` | Consumo de APIs |
 | SQL | Esquemas y validación |
-
----
 
 ## 💡 Lógica de Negocio
 
@@ -166,7 +157,6 @@ Consolidación y eliminación de duplicados antes de persistir. En Gold se usa `
 ### Limpieza de Contenido
 Las descripciones se limpian de HTML y los campos se homogenizan para reducir fricción downstream.
 
----
 
 ## 📋 Implementación por Capa
 
@@ -191,8 +181,6 @@ Materializan tablas listas para consumo:
 - `Gold.jobs`
 - `Gold.job_alerts`
 
----
-
 ## ⚙️ Orquestación (PL_Master)
 
 El pipeline ejecuta en este orden (diariamente a las 08:00am):
@@ -207,8 +195,6 @@ El pipeline ejecuta en este orden (diariamente a las 08:00am):
 **Lógica final:**
 - ✅ Si hay nuevas vacantes → envía correo
 - ⏭️ Si no hay → envía conrreo indicando que no hay nuevas vacantes
-
----
 
 ## 🚀 Preparación para Replicarlo
 
@@ -253,8 +239,6 @@ Schemas:
   └── Gold.job_alerts
 ```
 
----
-
 ## ✅ Validación
 
 Una ejecución correcta muestra:
@@ -265,14 +249,10 @@ Una ejecución correcta muestra:
 - 🔔 Control en `Gold.job_alerts`
 - 📧 Correo HTML con vacantes priorizadas o indicando que no hay nuevas vacantes
 
----
-
 ## 📊 Estado del Proyecto
 
 Base funcional completa: ingesta → transformación → scoring → persistencia → alertas.
 Diseñado para ampliarse con nuevas fuentes sin romper el modelo medallion.
-
----
 
 ## 🎁 Resultado Final
 
@@ -282,8 +262,6 @@ Una plataforma que:
 - 📌 **Prioriza** ofertas por relevancia
 - 📋 **Publica** tablas analíticas
 - 📧 **Notifica** automáticamente las mejores oportunidades
-
----
 
 ## 🔍 Vistas del Proyecto
 ### Visualización en Power BI
@@ -301,11 +279,7 @@ Una plataforma que:
 ### Semantic Model: **Jobs Semantic Model**
 <img width="578" height="359" alt="image" src="https://github.com/user-attachments/assets/5366f6c5-1b99-4560-835b-fa544ade9da6" />
 
-
-
-
 ## 🧑‍💻 Autor
 
 **Ramón Emilio López**
-- **GitHub:** [@Daniel20051601](https://github.com/Daniel20051601)
 - **LinkedIn:** [ramón-emilio-lopez-57a833211](https://www.linkedin.com/in/ram%C3%B3n-emilio-lopez-57a833211/)
