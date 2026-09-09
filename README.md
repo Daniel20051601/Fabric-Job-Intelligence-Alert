@@ -38,9 +38,9 @@ flowchart LR
 
 ## 📂 Estructura del Repositorio
 
-```
+```text
 Fabric-Job-Intelligence-Alert/
-├── Sources Notebook/
+├── Sources Notebooks/
 │   ├── NB_ingest_remotive.Notebook/
 │   └── NB_ingest_getonboard.Notebook/
 ├── Silver Notebooks/
@@ -53,9 +53,11 @@ Fabric-Job-Intelligence-Alert/
 │   ├── alm.settings.json
 │   ├── lakehouse.metadata.json
 │   └── shortcuts.metadata.json
-└── PL_Master.DataPipeline/
-    ├── pipeline-content.json
-    └── .schedules
+├── PL_Master.DataPipeline/
+│   ├── pipeline-content.json
+│   └── .schedules
+├── Jobs Semantic Model.SemanticModel/
+└── README.md
 ```
 
 | Componente | Responsabilidad |
