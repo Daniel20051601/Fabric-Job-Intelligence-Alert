@@ -1,0 +1,124 @@
+table jobs
+	lineageTag: 291d7330-4b37-4821-9311-b7253363a591
+	sourceLineageTag: [Gold].[jobs]
+
+	column title
+		dataType: string
+		lineageTag: 33210385-7831-44b4-8dc2-13631bf238c4
+		sourceLineageTag: title
+		summarizeBy: none
+		sourceColumn: title
+
+		annotation SummarizationSetBy = Automatic
+
+	column company
+		dataType: string
+		lineageTag: e06c5d9a-dbfa-4a60-b406-098344c17698
+		sourceLineageTag: company
+		summarizeBy: none
+		sourceColumn: company
+
+		annotation SummarizationSetBy = Automatic
+
+	column description
+		dataType: string
+		lineageTag: f370e23b-890b-4081-a7c6-52c5ebde7c15
+		sourceLineageTag: description
+		summarizeBy: none
+		sourceColumn: description
+
+		annotation SummarizationSetBy = Automatic
+
+	column remote
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: a842e47d-8046-49a0-a452-67a44ebc91f2
+		sourceLineageTag: remote
+		summarizeBy: none
+		sourceColumn: remote
+
+		annotation SummarizationSetBy = Automatic
+
+	column url
+		dataType: string
+		lineageTag: 59ea9491-58ff-4fa7-9fce-5a34c19c77a8
+		sourceLineageTag: url
+		summarizeBy: none
+		sourceColumn: url
+
+		annotation SummarizationSetBy = Automatic
+
+	column published_at
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 716ec92b-c806-4806-b7a2-fed5a935a2e8
+		sourceLineageTag: published_at
+		summarizeBy: none
+		sourceColumn: published_at
+
+		annotation SummarizationSetBy = Automatic
+
+	column match_score
+		dataType: int64
+		formatString: 0
+		lineageTag: 5e19c84c-7def-4e54-bdb0-7cc1a11755d2
+		sourceLineageTag: match_score
+		summarizeBy: sum
+		sourceColumn: match_score
+
+		annotation SummarizationSetBy = Automatic
+
+	column hash_id
+		dataType: string
+		lineageTag: 5db3b682-82a6-41e9-949b-84ca69c29592
+		sourceLineageTag: hash_id
+		summarizeBy: none
+		sourceColumn: hash_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column salary
+		dataType: string
+		lineageTag: 1234be83-417b-491e-a53e-5dcedcc0b52c
+		sourceLineageTag: salary
+		summarizeBy: none
+		sourceColumn: salary
+
+		annotation SummarizationSetBy = Automatic
+
+	column source
+		dataType: string
+		lineageTag: 53affef0-6c43-47d2-9511-0c74c348f938
+		sourceLineageTag: source
+		summarizeBy: none
+		sourceColumn: source
+
+		annotation SummarizationSetBy = Automatic
+
+	column ingestion_date
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 2f5e00d0-f1db-4937-a77c-9b6b582263cb
+		sourceLineageTag: ingestion_date
+		summarizeBy: none
+		sourceColumn: ingestion_date
+
+		annotation SummarizationSetBy = Automatic
+
+	column last_update
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 0a87d161-a583-4eda-9855-4e6c8717bdbf
+		sourceLineageTag: last_update
+		summarizeBy: none
+		sourceColumn: last_update
+
+		annotation SummarizationSetBy = Automatic
+
+	partition jobs = entity
+		mode: directLake
+		source
+			entityName: jobs
+			schemaName: Gold
+			expressionSource: 'DirectLake - LH_Medallion'
+

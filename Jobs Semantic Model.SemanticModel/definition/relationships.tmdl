@@ -1,0 +1,6 @@
+relationship 72a0f036-2db9-cb6f-fe2f-195cbe176dc6
+	crossFilteringBehavior: bothDirections
+	fromCardinality: one
+	fromColumn: jobs.hash_id
+	toColumn: job_alerts.hash_id
+

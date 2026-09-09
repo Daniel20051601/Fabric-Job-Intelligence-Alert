@@ -1,0 +1,40 @@
+table job_alerts
+	lineageTag: ef2ba117-f4b9-4e0f-a95e-9ca8b9f791e3
+	sourceLineageTag: [Gold].[job_alerts]
+
+	column hash_id
+		dataType: string
+		lineageTag: 5dc52840-14e5-41ba-a422-4b8023cd5cca
+		sourceLineageTag: hash_id
+		summarizeBy: none
+		sourceColumn: hash_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column is_sent
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 6df149aa-56f3-4dd2-aaa7-a461f05e66fb
+		sourceLineageTag: is_sent
+		summarizeBy: none
+		sourceColumn: is_sent
+
+		annotation SummarizationSetBy = Automatic
+
+	column sent_at
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: a21dd5cb-f947-4859-bb8c-2bc701f18b06
+		sourceLineageTag: sent_at
+		summarizeBy: none
+		sourceColumn: sent_at
+
+		annotation SummarizationSetBy = Automatic
+
+	partition job_alerts = entity
+		mode: directLake
+		source
+			entityName: job_alerts
+			schemaName: Gold
+			expressionSource: 'DirectLake - LH_Medallion'
+

@@ -1,0 +1,11 @@
+expression 'DirectLake - LH_Medallion' =
+		let
+		    Source = AzureStorage.DataLake("https://onelake.dfs.fabric.microsoft.com/c6b1c951-0a9a-4abc-b7e8-8728316be7e5/c51f0078-90ee-4fb3-a75e-1f5ab5bb6dbe", [HierarchicalNavigation=true])
+		in
+		    Source
+	lineageTag: a34b2e0b-e783-491d-9531-a01882a84fc0
+
+	annotation PBI_IncludeFutureArtifacts = False
+
+	annotation PBI_RemovedChildren = [{"remoteItemId":{"analysisServicesObject":{"sourceName":null,"sourceLineageTag":"[Silver].[job_matches]"}},"objectType":"Table"},{"remoteItemId":{"analysisServicesObject":{"sourceName":null,"sourceLineageTag":"[Silver].[jobs_postings]"}},"objectType":"Table"}]
+
