@@ -3,6 +3,10 @@
 Plataforma de inteligencia de empleo construida en **Microsoft Fabric** para ingerir ofertas desde múltiples fuentes, normalizarlas en un Lakehouse medallion, calcular relevancia para perfiles Data/AI/Analytics y generar alertas automáticas por correo.
 
 [![Microsoft Fabric](https://img.shields.io/badge/Microsoft%20Fabric-Lakehouse%20%26%20Pipelines-7A1FA2?style=flat-square)](https://learn.microsoft.com/fabric/)
+[![Power BI](https://img.shields.io/badge/Analytics-Power%20BI-F2C811?style=flat-square&logo=powerbi&logoColor=white)](https://powerbi.microsoft.com/)
+[![PySpark](https://img.shields.io/badge/Processing-PySpark-E25A1C?style=flat-square&logo=apachespark&logoColor=white)](https://spark.apache.org/docs/latest/api/python/)
+[![SQL](https://img.shields.io/badge/Query-SQL-4479A1?style=flat-square&logo=postgresql&logoColor=white)](https://www.postgresql.org/docs/)
+[![Medallion](https://img.shields.io/badge/Architecture-Medallion%20Model-2E86C1?style=flat-square)](https://learn.microsoft.com/fabric/data-engineering/lakehouse-overview)
 [![Python](https://img.shields.io/badge/Implementation-Python-3776AB?style=flat-square&logo=python&logoColor=white)](https://www.python.org/)
 [![Delta Lake](https://img.shields.io/badge/Storage-Delta%20Tables-0099B0?style=flat-square)](https://learn.microsoft.com/fabric/data-engineering/lakehouse-overview)
 [![Orchestration](https://img.shields.io/badge/Orchestration-Fabric%20Pipeline-F5A623?style=flat-square)](https://learn.microsoft.com/fabric/data-factory/data-pipelines)
