@@ -106,7 +106,25 @@ target_titles = [
     "azure data engineer",
     "data platform engineer",
     "ingeniero de datos cloud",
-    "ingeniero de datos en la nube"
+    "ingeniero de datos en la nube",
+    "Microsoft",
+    "azure",
+    "microsoft azure",
+    "microsoft fabric",
+    "fabric",
+    "azure fabric",
+    "databricks",
+    "azure databricks",
+    "python",
+    "sql",
+    "pyspark",
+    "spark",
+    "apache spark",
+    "big data",
+    "etl",
+    "elt",
+    "integration",
+    "integracion"
 ]
 
 
@@ -334,12 +352,11 @@ display(df_matches.orderBy(F.col('match_score').desc()))
 # MARKDOWN ********************
 
 # ### Selecionamos los empleos con un mayor `match_score`
-# En este caso tomaremos los empleos con un `match_score` >= 60
 
 # CELL ********************
 
 df_high_score_jobs = df_matches.filter(
-    F.col('match_score') >= 60
+    F.col('match_score') >= 50
 )
 
 # METADATA ********************
