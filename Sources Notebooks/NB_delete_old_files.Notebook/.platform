@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Notebook",
+    "displayName": "NB_delete_old_files"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "531c6d63-afdd-a839-4702-e9ea8c31c703"
+  }
+}
